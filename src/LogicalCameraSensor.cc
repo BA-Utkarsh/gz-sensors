@@ -110,13 +110,14 @@ bool LogicalCameraSensor::Load(sdf::ElementPtr _sdf)
     return false;
 
   if (this->Topic().empty())
-    this->SetTopic("/logical_camera");
+    this->SetTopic("/camera/logical");
 
   this->dataPtr->pub =
       this->dataPtr->node.Advertise<msgs::LogicalCameraImage>(
       this->Topic());
 
-  this->dataPtr->pub_logic =this->dataPtr->node_logic.Advertise<msgs::LogicalCameraSensor>("/logical_camera_sensor");
+  this->dataPtr->pub_logic =this->dataPtr->node_logic.Advertise<msgs::LogicalCameraSensor>(
+		  this->Topic() + "/frustum");
 
   if (!this->dataPtr->pub)
   {
@@ -190,9 +191,10 @@ bool LogicalCameraSensor::Update(
   // publish
   this->dataPtr->msg_logic.set_near_clip(this->dataPtr->frustum.Near());
   this->dataPtr->msg_logic.set_far_clip(this->dataPtr->frustum.Far());
-  this->dataPtr->msg_logic.set_horizontal_fov(1.04719755);
+  this->dataPtr->msg_logic.set_horizontal_fov(this->dataPtr->frustum.FOV().Radian());
   this->dataPtr->msg_logic.set_aspect_ratio(this->dataPtr->frustum.AspectRatio());
   this->AddSequence(this->dataPtr->msg.mutable_header());
+
   this->dataPtr->pub.Publish(this->dataPtr->msg);
   this->dataPtr->pub_logic.Publish(this->dataPtr->msg_logic);
 
