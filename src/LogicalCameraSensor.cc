@@ -116,8 +116,8 @@ bool LogicalCameraSensor::Load(sdf::ElementPtr _sdf)
       this->dataPtr->node.Advertise<msgs::LogicalCameraImage>(
       this->Topic());
 
-  this->dataPtr->pub_logic =this->dataPtr->node_logic.Advertise<msgs::LogicalCameraSensor>(
-		  this->Topic() + "/frustum");
+  this->dataPtr->pub_logic = this->dataPtr->node_logic.Advertise<msgs::LogicalCameraSensor>(
+      this->Topic() + "/frustum");
 
   if (!this->dataPtr->pub)
   {
@@ -181,7 +181,7 @@ bool LogicalCameraSensor::Update(
   frame->set_key("frame_id");
   frame->add_value(this->FrameId());
 
-  *this->dataPtr->msg_logic.mutable_header()->mutable_stamp() =msgs::Convert(_now);
+  *this->dataPtr->msg_logic.mutable_header()->mutable_stamp() = msgs::Convert(_now);
   this->dataPtr->msg_logic.mutable_header()->clear_data();
   auto frame_log = this->dataPtr->msg_logic.mutable_header()->add_data();
 

@@ -242,6 +242,6 @@ namespace gz
       GZ_UTILS_WARN_RESUME__DLL_INTERFACE_MISSING
     };
     }
-  }
-}
+  }  // namespace sensors
+}  // namespace gz
 #endif
